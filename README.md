@@ -1,67 +1,40 @@
 # granite-sys-scheduler-field
 
-`granite-sys-scheduler-field` treats systems programming as a local verification problem. The R implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`granite-sys-scheduler-field` is a compact R repository for systems programming, centered on this goal: Build an R toolkit that studies scheduler behavior through log and snapshot fixtures, with replay consistency checks and local-only command execution.
 
-## Granite Sys Scheduler Field Checkpoints
+## Reason For The Project
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+This is intentionally local and self-contained so it can be inspected without credentials, services, or seeded history.
 
-## What This Is For
+## Granite Sys Scheduler Field Review Notes
 
-This is not a wrapper around a service. It is a self-contained project that shows how the model behaves when demand, capacity, latency, risk, and weight move in different directions.
+Start with `dirty state` and `allocation pressure`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
-## Project Layout
+## What It Does
 
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+- `fixtures/domain_review.csv` adds cases for allocation pressure and dirty state.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/granite-sys-scheduler-walkthrough.md` walks through the case spread.
+- The R code includes a review path for `dirty state` and `allocation pressure`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Useful Pieces
+## How It Is Put Together
 
-- Includes extended examples for bounds checks, including `surge` and `degraded`.
-- Documents low-level invariants tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+The core code exposes a scoring path and the added review layer uses `signal`, `slack`, `drag`, and `confidence`. The domain terms are `allocation pressure`, `dirty state`, `guard slack`, and `layout drift`.
 
-## Architecture Notes
+The R code keeps the review rule close to the tests.
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying systems programming behavior without needing a service or database unless the language project itself is SQL. The R version keeps the model as simple functions over named lists for easy analysis use.
-
-## Tooling
-
-Use a normal shell with R available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Case Study
-
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
-
-## Local Workflow
+## Run It
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Check It
 
-## Quality Gate
+That command is also the regression path. It verifies the domain cases and catches mismatches between the CSV, metadata, and code.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Boundaries
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Expansion Ideas
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more systems programming fixture that focuses on a malformed or borderline input.
-
-## Scope
-
-The examples cover useful edges, not every edge. A larger version would add malformed-input tests, richer reports, and deeper domain parsers.
+The repository is intentionally scoped to local checks. I would expand it by adding adversarial fixtures before adding features.

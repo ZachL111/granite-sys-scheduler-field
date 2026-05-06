@@ -1,0 +1,73 @@
+{
+  "repo": "granite-sys-scheduler-field",
+  "language": "R",
+  "category": "Systems programming",
+  "goal": "Build an R toolkit that studies scheduler behavior through log and snapshot fixtures, with replay consistency checks and local-only command execution.",
+  "review_model": {
+    "terms": [
+      "allocation pressure",
+      "dirty state",
+      "guard slack",
+      "layout drift"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "allocation pressure",
+      "signal": 56,
+      "slack": 33,
+      "drag": 12,
+      "confidence": 57,
+      "score": 166,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "dirty state",
+      "signal": 75,
+      "slack": 51,
+      "drag": 8,
+      "confidence": 85,
+      "score": 262,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "guard slack",
+      "signal": 80,
+      "slack": 52,
+      "drag": 18,
+      "confidence": 80,
+      "score": 238,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "layout drift",
+      "signal": 58,
+      "slack": 28,
+      "drag": 21,
+      "confidence": 53,
+      "score": 134,
+      "lane": "watch"
+    },
+    {
+      "name": "stale",
+      "focus": "allocation pressure",
+      "signal": 53,
+      "slack": 20,
+      "drag": 23,
+      "confidence": 72,
+      "score": 129,
+      "lane": "watch"
+    }
+  ]
+}
